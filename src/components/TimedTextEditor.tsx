@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { Editor, EditorState } from 'draft-js';
+import { ContentBlock, ContentState, Editor, EditorState, convertFromRaw } from 'draft-js';
 import { TranscriptBlock } from './TranscriptDraftjsBlock';
 
 export interface TranscriptSettings {
@@ -15,7 +15,7 @@ export interface TranscriptSettings {
 
 interface TranscriptEditorProps {
     // Our Transcript
-    transcripts: string;
+    transcripts: any;
     onWordClick: (word: string) => void;
     onSave: () => void;
     settings: TranscriptSettings;
@@ -28,11 +28,10 @@ export const TimedTranscriptEditor: React.FC<TranscriptEditorProps> = (props: Tr
     // Settings is state managed by something else...
     const { settings, transcripts, onWordClick, onSave } = props;
 
-    console.log('settings and transcripts', settings, transcripts);
+    // VTT Files are showing up as Raw DraftJS ContentState
+    const initialContentState = convertFromRaw(transcripts);
 
-    // the above "component" can control settings and pass them in here
-    // so how does one create a DraftJS Editor state?
-    const [editorState, updateEditorState] = useState(EditorState.createEmpty());
+    const [editorState, updateEditorState] = useState(EditorState.createWithContent(initialContentState));
 
     const blockRenderer = useCallback(() => {
         return {
@@ -43,11 +42,13 @@ export const TimedTranscriptEditor: React.FC<TranscriptEditorProps> = (props: Tr
                 settings,
                 onWordClick,
                 onSave,
-                transcripts
+                editorState
             }
         }
     }, [settings]);
 
+    // So on change here fires when internal state is created...
+    // Ideally we just keep track of our Content State, and auto save if enabled - or
     return (
         <Editor
             editorState={editorState}

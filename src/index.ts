@@ -1,1 +1,5 @@
-export { AdeptTranscriptEditor, Input } from './AdeptTranscriptEditor';
+import { AdeptTranscriptEditor } from './AdeptTranscriptEditor';
+
+export { AdeptTranscriptEditor};
+
+export default AdeptTranscriptEditor;

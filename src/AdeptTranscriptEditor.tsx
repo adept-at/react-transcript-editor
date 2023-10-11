@@ -2,9 +2,9 @@ import React, { createRef } from 'react';
 import { TimedTranscriptEditor } from './components/TimedTextEditor';
 
 interface AdeptTranscriptEditorProps {
-    transcripts: any;
+    transcriptData: any;
     // Video to be controlled.
-    videoRef: HTMLVideoElement;
+    videoRef: React.RefObject<HTMLVideoElement>;
     // URL to playback Media from.
     mediaUrl?: string;
     title: string;
@@ -17,7 +17,7 @@ interface AdeptTranscriptEditorProps {
 };
 
 export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = ({
-    transcripts,
+    transcriptData,
     videoRef,
     title,
     onClick,
@@ -66,7 +66,7 @@ export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = ({
     // Just start displaying the captions in a "Container".
 
     return <TimedTranscriptEditor
-        transcripts={transcripts}
+        transcripts={transcriptData}
         settings={settings}
         onWordClick={() => console.log('word clicked!')}
         onSave={() => console.log('save!')}
