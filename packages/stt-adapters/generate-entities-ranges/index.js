@@ -10,7 +10,7 @@
 * attribute for the word object containing the text. eg word ={ punct:'helo', ... }
 *  or eg word ={ text:'helo', ... }
 */
-const generateEntitiesRanges = (words, wordAttributeName) => {
+export const generateEntitiesRanges = (words, wordAttributeName) => {
   let position = 0;
 
   return words.map((word) => {

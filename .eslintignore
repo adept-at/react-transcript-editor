@@ -1,6 +1,3 @@
-node_modules
-docs
-/dist
-/build
-**/**.json
-**/sample
+.github
+build
+packages

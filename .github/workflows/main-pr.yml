@@ -1,0 +1,29 @@
+name: PR into main
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  unitTests:
+    name: unitTests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+          registry-url: https://npm.pkg.github.com
+          scope: "@adept-at"
+      - name: npm install, lint, build, and test
+        run: |
+          npm ci
+          npm run lint
+          npm run build
+      - name: Comment with Test Coverage
+        uses: dkershner6/jest-coverage-commenter-action@v1
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          test_command: "npm run test:coverage"

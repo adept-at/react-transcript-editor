@@ -32,10 +32,18 @@ const exportOptionsList = [
   { value: "digitalpaperedit", label: "Digital Paper Edit - Json" }
 ];
 
+/**
+ * Can we pass in a Video Ref here?
+ */
 class TranscriptEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.videoRef = React.createRef();
+
+    if (props.videoRef) {
+      this.videoRef = props.videoRef;
+    } else {
+      this.videoRef = React.createRef();
+    }
 
     this.state = {
       currentTime: 0,
@@ -53,6 +61,7 @@ class TranscriptEditor extends React.Component {
       mediaDuration: "00:00:00:00",
       gridDisplay: null,
     };
+
     this.timedTextEditorRef = React.createRef();
   }
 
@@ -88,7 +97,7 @@ class TranscriptEditor extends React.Component {
     };
     let displayMedia = null;
     // if the mediaUrl is for an audio file, then extend TimedTextEditor to be full width
-    if (this.props.mediaType === "audio") {
+    if (this.props.mediaType === "audio" || !this.props.mediaUrl) {
       console.log("this.props.mediaType", this.props.mediaType);
       gridDisplay = null;
       displayMedia = { display: "none" };
@@ -109,11 +118,13 @@ class TranscriptEditor extends React.Component {
 
   // eslint-disable-next-line class-methods-use-this
   handleWordClick = startTime => {
+
     if (this.props.handleAnalyticsEvents) {
       this.props.handleAnalyticsEvents({
         category: "TranscriptEditor",
         action: "doubleClickOnWord",
         name: "startTime",
+
         value: secondsToTimecode(startTime)
       });
     }
@@ -474,6 +485,7 @@ class TranscriptEditor extends React.Component {
 
     return (
       <div className={style.container}>
+        <p>Welcome to React Transcript Edtior</p>
         {this.props.mediaUrl ? header : null}
 
         <div className={style.grid}>
@@ -484,7 +496,7 @@ class TranscriptEditor extends React.Component {
 
             <main
               className={
-                this.props.mediaType === "audio"
+                this.props.mediaType === "audio" || (this.props.mediaType === "video" && !this.props.mediaUrl)
                   ? style.mainWithAudiio
                   : style.main
               }
@@ -504,6 +516,7 @@ TranscriptEditor.propTypes = {
   onClick: PropTypes.func,
   title: PropTypes.string,
   mediaUrl: PropTypes.string,
+  videoRef: PropTypes.element,
   isEditable: PropTypes.bool,
   spellCheck: PropTypes.bool,
   sttJsonType: PropTypes.string,

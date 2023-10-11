@@ -1,0 +1,1 @@
+export { AdeptTranscriptEditor, Input } from './AdeptTranscriptEditor';

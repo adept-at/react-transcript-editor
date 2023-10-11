@@ -1,0 +1,34 @@
+{
+    "tabWidth": 4,
+    "singleQuote": true,
+    "useTabs": false,
+    "printWidth": 120,
+    "trailingComma": "none",
+    "overrides": [
+      {
+        "files": "*.*rc",
+        "options": {
+          "tabWidth": 2
+        }
+      },
+      {
+        "files": "*.json",
+        "options": {
+          "tabWidth": 2
+        }
+      },
+      {
+        "files": "*.yml",
+        "options": {
+          "tabWidth": 2
+        }
+      },
+      {
+        "files": "*.graphql",
+        "options": {
+          "tabWidth": 2
+        }
+      }
+    ]
+  }
+  
