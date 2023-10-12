@@ -1,10 +1,13 @@
 import React, { createRef } from 'react';
 import { TimedTranscriptEditor } from './components/TimedTextEditor';
 
+
 interface AdeptTranscriptEditorProps {
+    // Certain on these:
+    mediaType?: 'video' | 'audio'
     transcriptData: any;
-    // Video to be controlled.
     videoRef: React.RefObject<HTMLVideoElement>;
+    saveEdits: (vttTranscripts: any, draftjs: any) => void;
     // URL to playback Media from.
     mediaUrl?: string;
     title: string;
@@ -13,18 +16,10 @@ interface AdeptTranscriptEditorProps {
     // Not required really.
     spellCheck?: boolean;
     fileName?: string;
-    mediaType?: 'video' | 'audio'
 };
 
-export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = ({
-    transcriptData,
-    videoRef,
-    title,
-    onClick,
-    isEditable,
-    mediaUrl,
-    mediaType
-}: AdeptTranscriptEditorProps) => {
+export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = (props: AdeptTranscriptEditorProps) => {
+    const { transcriptData, videoRef, saveEdits } = props;
     /**
      * So we need to create our Adept Transcript Editor State...
      * Its possible our state is not as simple as we think... and instead we need
@@ -42,14 +37,12 @@ export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = ({
     };
     /* Manage our dimensions based on the presence of Media URL or not? */
 
-    /**
-     *  Need a way to update the time of the video when a word is double clicked.
-     */
+    const [shouldAutosave, updateShouldAutosave] = React.useState(false);
 
-    // Show speakers,
-    // settings toggle
-    // shortcuts toggle
-
+    /*
+    setInterval(() => {
+    }, settings.autoSaveDelayMs);
+    */
     /**
      * We want to return:
      * Video Player -> We just want the ref, and use our own controls to update time, etc...
@@ -60,15 +53,12 @@ export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = ({
      * <Header> - contains "settings", "shortcuts", and controls.
      */
 
-    // What is the best way to do this incrementally? I feel like we could start at the beginning and then slowly just drill donw...
-    // Do we even need a "media player"? Or can we just rely entirely on the Video
-    // player already gifted to us.
-    // Just start displaying the captions in a "Container".
-
+    // We should display a "header" with settings, shortcuts, and save state/button?
+    // Right now we JUST have the editor.. build out other componenets independently and show here.
     return <TimedTranscriptEditor
         transcripts={transcriptData}
         settings={settings}
         onWordClick={() => console.log('word clicked!')}
-        onSave={() => console.log('save!')}
+        onSave={saveEdits}
     />;
 };

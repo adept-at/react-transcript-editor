@@ -8,7 +8,7 @@ import {
   ContentBlock,
   ContentState
  } from 'draft-js';
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -23,7 +23,7 @@ interface BlockProps {
     // Our Transcript
     editorState: EditorState;
     onWordClick: (word: string) => void;
-    onSave: () => {};
+    updateEditorState: Dispatch<SetStateAction<EditorState>>;
     settings: TranscriptSettings;
 }
 
@@ -61,23 +61,27 @@ const TranscriptBody = styled.div`
 export const TranscriptBlock: React.FC<TranscriptBlockInput> = (props: TranscriptBlockInput) => {
     // onWordClick ideally should update the time of the video to where the word is.
     const { block, blockProps, contentState } = props; 
-    console.log(block);
-    console.log(contentState)
 
     const [speakerName, updateSpeakerName] = React.useState(block.getData().get('speaker'));
     const [startTime, _na] = React.useState(block.getData().get('start'));
 
+    const { editorState, updateEditorState } = blockProps
     // So for speaker name changes we just update the blocks data?
     useEffect(() => {
         // Update the DraftJS block.
         const selection = SelectionState.createEmpty(block.getKey());
 
-        const newContent = Modifier.mergeBlockData(contentState, selection, block.getData().merge({ speaker: speakerName }));
-        const newEditor = EditorState.push(blockProps.editorState, newContent, 'change-block-data');
-        console.log('Saving name?');
+        const newContent = Modifier.mergeBlockData(
+            editorState.getCurrentContent(),
+            selection,
+            block.getData().merge({ speaker: speakerName })
+        );
 
-        EditorState.forceSelection(newEditor, selection)
-    }, [speakerName]);
+        const newEditor = EditorState.push(blockProps.editorState, newContent, 'change-block-data');
+
+        blockProps.updateEditorState(newEditor);
+        // What would it be like to "update all" speaker names?
+    }, [speakerName, blockProps.updateEditorState]);
 
     const speakerPrompt = () => {
         const newName = prompt('Update Speaker Name?', speakerName);

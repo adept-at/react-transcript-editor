@@ -302,8 +302,6 @@ class TimedTextEditor extends React.Component {
     const tKey = 84;
 
     if (e.keyCode === enterKey) {
-      console.log('customKeyBindingFn');
-
       return "split-paragraph";
     }
     // if alt key is pressed in combination with these other keys
@@ -519,7 +517,6 @@ class TimedTextEditor extends React.Component {
   };
 
   render() {
-    // console.log('render TimedTextEditor');
     const currentWord = this.getCurrentWord();
     const highlightColour = "#69e3c2";
     const unplayedColor = "#767676";
