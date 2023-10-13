@@ -6,6 +6,11 @@ import { convertToDigitalPaperEdit } from './vttConvert/draftjs-to-digital-paper
 import subtitlesGenerator from './vttConvert/subtitles-generator';
 import { updateTimestamps } from './vttConvert/decorateDraftForVtt';
 
+/**
+ * FYI: Here is the standard for WebVTT files:
+ * https://www.w3.org/TR/webvtt1/
+ */
+
 export interface TranscriptSettings {
     timecodes: boolean;
     speakerNames: boolean;
