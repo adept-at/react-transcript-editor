@@ -7,6 +7,9 @@ import MediaPlayer from './components/media-player/index.js';
 import PlayerControls from './components/media-player/src/PlayerControls/index.js';
 import groupWordsInParagraphsBySpeakersDPE from './stt-adapters/digital-paper-edit/group-words-by-speakers.js';
 
+import { generateEntitiesRanges } from './stt-adapters/generate-entities-ranges/index.js';
+import { createEntityMap } from './stt-adapters/create-entity-map/index.js';
+
 import {
   secondsToTimecode,
   timecodeToSeconds,
@@ -31,5 +34,7 @@ export {
   shortTimecode,
   exportAdapter,
   sttJsonAdapter,
+  generateEntitiesRanges,
+  createEntityMap,
   groupWordsInParagraphsBySpeakersDPE
 };

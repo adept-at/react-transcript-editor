@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "rootDirs": ["src"],
+    "jsx": "react",
+    "module": "commonjs",
+    "target": "ES6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "noImplicitAny": false,
+    "allowJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "outDir": "build/cjs",
+    "moduleResolution": "node",
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
+}

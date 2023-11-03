@@ -9,7 +9,6 @@ import {
  } from 'draft-js';
 
 import SpeakerLabel from './SpeakerLabel';
-// import { shortTimecode, secondsToTimecode } from '../../Util/timecode-converter/';
 
 import {
   shortTimecode,
@@ -29,7 +28,6 @@ const updateSpeakerName = (oldName, newName, state) => {
 
   return convertFromRaw(contentToUpdate);
 }
-
 
 class WrapperBlock extends React.Component {
   constructor(props) {

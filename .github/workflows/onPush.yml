@@ -1,0 +1,30 @@
+name: CI
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+          registry-url: https://npm.pkg.github.com
+      - name: npm install, lint, build
+        run: |
+          npm install
+          npm run build:component
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READ_GH_PACKAGES }}
+
+      # publish when builds pass on the `main` branch
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+          registry-url: https://npm.pkg.github.com
+      - name: publish
+        if: contains(github.ref, 'main')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish

@@ -8,7 +8,7 @@ import {
   faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Tooltip from 'react-simple-tooltip';
+import Tooltip from 'rc-tooltip';
 import style from '../index.module.css';
 
 const helpMessage = (
@@ -40,23 +40,9 @@ const helpMessage = (
 const HowDoesThisWork = (handleAnalyticsEvents) => (
   <Tooltip
     className={ style.help }
-    content={ helpMessage }
-    fadeDuration={ 250 }
-    fadeEasing={ 'ease-in' }
     placement={ 'bottom' }
     radius={ 5 }
-    border={ '#ffffff' }
-    background={ '#f2f2f2' }
-    color={ '#000000' }
-    onMouseOver={ () => {
-      if (handleAnalyticsEvents) {
-        handleAnalyticsEvents({
-          category: "TranscriptEditor",
-          action: "hover",
-          name: "howDoesThisWork"
-        });
-      }
-    } }
+    overlay={helpMessage}
   >
     <FontAwesomeIcon className={ style.icon } icon={ faQuestionCircle } />
       How does this work?

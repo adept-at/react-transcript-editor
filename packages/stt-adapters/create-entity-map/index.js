@@ -13,7 +13,7 @@ const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatte
  * helper function to create createEntityMap
  * @param {*} blocks - draftJs blocks
  */
-const createEntityMap = (blocks) => {
+export const createEntityMap = (blocks) => {
   const entityRanges = blocks.map(block => block.entityRanges);
   const flatEntityRanges = flatten(entityRanges);
 
