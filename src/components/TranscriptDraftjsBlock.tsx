@@ -1,23 +1,11 @@
-import { 
-  EditorBlock, 
-  Modifier, 
-  EditorState, 
-  SelectionState,
-  convertFromRaw,
-  convertToRaw,
-  ContentBlock,
-  ContentState
- } from 'draft-js';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
+import { mdiAccountEdit } from '@mdi/js';
+import Icon from '@mdi/react';
+import { EditorBlock, Modifier, EditorState, SelectionState, ContentBlock, ContentState } from 'draft-js';
 import styled from 'styled-components';
 
-
-import { faUser, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 import { TranscriptSettings } from './TimedTextEditor';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Icon from '@mdi/react';
-import { mdiAccount, mdiAccountEdit } from '@mdi/js';
 
 interface BlockProps {
     // Our Transcript
@@ -29,14 +17,14 @@ interface BlockProps {
 
 interface TranscriptBlockInput {
     block: ContentBlock;
-    blockProps: BlockProps
+    blockProps: BlockProps;
     contentState: ContentState;
 }
 
 const TranscriptContainer = styled.div`
     display: flex;
     flex-direction: column;
-    width: 100%
+    width: 100%;
 `;
 
 const TranscriptHeader = styled.div`
@@ -51,8 +39,8 @@ const TranscriptBody = styled.div`
     display: flex;
 `;
 /**
- * Here we will have the following compnents:  
- * SpeakerLabel 
+ * Here we will have the following compnents:
+ * SpeakerLabel
  * Timecode Element
  * -> Editor Block
  */
@@ -60,12 +48,12 @@ const TranscriptBody = styled.div`
 // this component Should render an author name, timecode, and text.
 export const TranscriptBlock: React.FC<TranscriptBlockInput> = (props: TranscriptBlockInput) => {
     // onWordClick ideally should update the time of the video to where the word is.
-    const { block, blockProps, contentState } = props; 
+    const { block, blockProps } = props;
 
     const [speakerName, updateSpeakerName] = React.useState(block.getData().get('speaker'));
-    const [startTime, _na] = React.useState(block.getData().get('start'));
+    const [startTime] = React.useState(block.getData().get('start'));
 
-    const { editorState, updateEditorState } = blockProps
+    const { editorState } = blockProps;
     // So for speaker name changes we just update the blocks data?
     useEffect(() => {
         // Update the DraftJS block.
@@ -100,9 +88,9 @@ export const TranscriptBlock: React.FC<TranscriptBlockInput> = (props: Transcrip
         <TranscriptContainer>
             <TranscriptHeader>
                 {startTime}
-                <div onClick={speakerPrompt}>
+                <button onClick={speakerPrompt}>
                     <Icon path={mdiAccountEdit} size={'2em'} />
-                </div>
+                </button>
                 {speakerName ?? 'TBD'}
             </TranscriptHeader>
             <TranscriptBody>

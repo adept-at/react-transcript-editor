@@ -6,7 +6,7 @@
 // code obtained from https://github.com/bbc/stt-align-node
 
 import difflib from 'difflib';
-import { BlockMap, ContentState, EditorChangeType, EditorState, RawDraftContentBlock, RawDraftContentState, convertFromRaw, convertToRaw } from 'draft-js';
+import { EditorState, RawDraftContentBlock, RawDraftContentState, convertFromRaw, convertToRaw } from 'draft-js';
 import everpolate from 'everpolate';
 import { toWords } from 'number-to-words';
 
@@ -150,11 +150,11 @@ function interpolate(wordsList) {
  */
 function alignWords(sttWords, transcriptWords) {
     // # convert words to lowercase and remove numbers and special characters
-    const sttWordsStripped = sttWords.map((word) => {
+    const sttWordsStripped = sttWords.map(word => {
         return normaliseWord(word.word);
     });
 
-    const transcriptWordsStripped = transcriptWords.map((word) => {
+    const transcriptWordsStripped = transcriptWords.map(word => {
         return normaliseWord(word);
     });
     // # create empty list to receive data
@@ -169,7 +169,7 @@ function alignWords(sttWords, transcriptWords) {
     const matcher = new difflib.SequenceMatcher(null, sttWordsStripped, transcriptWordsStripped);
     const opCodes = matcher.getOpcodes();
 
-    opCodes.forEach((opCode) => {
+    opCodes.forEach(opCode => {
         const matchType = opCode[0];
         const sttStartIndex = opCode[1];
         const sttEndIndex = opCode[2];
@@ -199,16 +199,16 @@ export interface EntityMap {
     };
 }
 
-const flatten = (list) => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
+const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
 
 const createEntityMap = (blocks): EntityMap => {
-    const entityRanges = blocks.map((block) => block.entityRanges);
+    const entityRanges = blocks.map(block => block.entityRanges);
     // eslint-disable-next-line no-use-before-define
     const flatEntityRanges = flatten(entityRanges);
 
     const entityMap: EntityMap = {};
 
-    flatEntityRanges.forEach((data) => {
+    flatEntityRanges.forEach(data => {
         entityMap[data.key] = {
             type: 'WORD',
             mutability: 'MUTABLE',
@@ -246,7 +246,7 @@ const generateEntitiesRanges = (words, start, end): EntityRange[] => {
     let timePosition = start;
     const timePerWord = (end - start) / words.length;
 
-    return words.map((word) => {
+    return words.map(word => {
         const result = {
             confidence: 0,
             start: timePosition,
@@ -254,7 +254,9 @@ const generateEntitiesRanges = (words, start, end): EntityRange[] => {
             text: word,
             offset: position,
             length: word.length,
-            key: Math.random().toString(36).substring(6)
+            key: Math.random()
+                .toString(36)
+                .substring(6)
         };
         // increase position counter - to determine word offset in paragraph
         position = position + word.length + 1;
@@ -267,7 +269,7 @@ const generateEntitiesRanges = (words, start, end): EntityRange[] => {
  * Helper function to generate draft.js entities,
  * see unit test for example data structure
  * it adds offset and length to recognise word in draftjs
- * 
+ *
  *  @param {json} words  - List of words
  *  @param {string} wordAttributeName - eg 'punct' or 'text' or etc.
  * attribute for the word object containing the text. eg word ={ punct:'helo', ... }
@@ -276,7 +278,7 @@ const generateEntitiesRanges = (words, start, end): EntityRange[] => {
 const generateEntitiesRangesAdept = (words, wordAttributeName) => {
     let position = 0;
 
-    return words.map((word) => {
+    return words.map(word => {
         const result = {
             start: word.start,
             end: word.end,
@@ -284,7 +286,9 @@ const generateEntitiesRangesAdept = (words, wordAttributeName) => {
             text: word[wordAttributeName],
             offset: position,
             length: word[wordAttributeName].length,
-            key: Math.random().toString(36).substring(6)
+            key: Math.random()
+                .toString(36)
+                .substring(6)
         };
         // increase position counter - to determine word offset in paragraph
         position = position + word[wordAttributeName].length + 1;
@@ -292,7 +296,6 @@ const generateEntitiesRangesAdept = (words, wordAttributeName) => {
         return result;
     });
 };
-
 
 /**
  * This defines the data associated with our independent Transcript blocks
@@ -374,12 +377,15 @@ export const convertVttToDraftJs = (vttText: string): TranscriptDraft => {
 };
 
 // Update timestamps usign stt-align (bbc).
-export const updateTimestamps = (currentContent: RawDraftContentState, originalContent: RawDraftContentState): RawDraftContentState => {
+export const updateTimestamps = (
+    currentContent: RawDraftContentState,
+    originalContent: RawDraftContentState
+): RawDraftContentState => {
     const currentText = convertContentToText(currentContent);
 
     const entityMap = originalContent.entityMap;
 
-    const entities: Array<{ start: number; end: number; word: string}> = [];
+    const entities: Array<{ start: number; end: number; word: string }> = [];
 
     for (const entityIdx in entityMap) {
         entities.push({
@@ -411,7 +417,6 @@ const convertContentToText = (content: RawDraftContentState) => {
 
     return text;
 };
-
 
 export const updateTimestampsForEditorState = (editorState: EditorState, originalState: RawDraftContentState) => {
     // Update timestamps according to the original state.
@@ -447,13 +452,13 @@ export const updateTimestampsForEditorState = (editorState: EditorState, origina
         // Set the updated selection state on the new editor state
         const newEditorStateSelected = EditorState.forceSelection(newEditorState, selection);
         //this.setState({ editorState: newEditorStateSelected });
-        
+
         return newEditorStateSelected;
     } else {
-    //this.setState({ editorState: newEditorState });
-    return newEditorState;
+        //this.setState({ editorState: newEditorState });
+        return newEditorState;
     }
-}
+};
 
 const createEntity = (start, end, confidence, word, wordIndex): Entity => {
     return {
@@ -466,7 +471,10 @@ const createEntity = (start, end, confidence, word, wordIndex): Entity => {
     };
 };
 
-const createContentFromEntityList = (currentContent: RawDraftContentState, newEntities: EntityRange[]): RawDraftContentState => {
+const createContentFromEntityList = (
+    currentContent: RawDraftContentState,
+    newEntities: EntityRange[]
+): RawDraftContentState => {
     // Update entites to block structure.
     const updatedBlockArray: RawDraftContentBlock[] = [];
     let totalWords = 0;
@@ -484,8 +492,8 @@ const createContentFromEntityList = (currentContent: RawDraftContentState, newEn
             speaker = 'U_UKN';
         }
 
-        const updatedBlock = {
-            text: blockEntites.map((entry) => entry.punct).join(' '),
+        const updatedBlock = ({
+            text: blockEntites.map(entry => entry.punct).join(' '),
             type: 'paragraph',
             data: {
                 speaker: speaker,
@@ -494,7 +502,7 @@ const createContentFromEntityList = (currentContent: RawDraftContentState, newEn
                 end: blockEntites[0].end
             },
             entityRanges: generateEntitiesRangesAdept(blockEntites, 'punct')
-        } as unknown as RawDraftContentBlock;
+        } as unknown) as RawDraftContentBlock;
 
         updatedBlockArray.push(updatedBlock);
         totalWords += wordsInBlock;

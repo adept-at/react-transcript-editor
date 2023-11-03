@@ -1,11 +1,12 @@
 import React, { createRef } from 'react';
-import { TimedTranscriptEditor } from './components/TimedTextEditor';
+
 import styled from 'styled-components';
 
+import { TimedTranscriptEditor } from './components/TimedTextEditor';
 
 interface AdeptTranscriptEditorProps {
     // Certain on these:
-    mediaType?: 'video' | 'audio'
+    mediaType?: 'video' | 'audio';
     transcriptData: any;
     videoRef: React.RefObject<HTMLVideoElement>;
     saveEdits: (vttTranscripts: any, draftjs: any) => void;
@@ -17,14 +18,14 @@ interface AdeptTranscriptEditorProps {
     // Not required really.
     spellCheck?: boolean;
     fileName?: string;
-};
+}
 
 export const TranscriptEditContainer = styled.div`
     display: flex;
     border-radius: 4px;
-    border:1px solid #d1dadf;
+    border: 1px solid #d1dadf;
     padding: 0.25rem;
-    min-height:0;
+    min-height: 0;
     flex: 1 1 auto; /* Positive flex-shrink */
     overflow: auto;
 `;
@@ -66,7 +67,7 @@ export const AdeptTranscriptEditor: React.FC<AdeptTranscriptEditorProps> = (prop
 
     // We should display a "header" with settings, shortcuts, and save state/button?
     // Right now we JUST have the editor.. build out other componenets independently and show here.
-    console.log("Latest and greatest.");
+    console.log('Latest and greatest.');
     return (
         <TranscriptEditContainer>
             <TimedTranscriptEditor
